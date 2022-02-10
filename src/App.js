@@ -2,6 +2,7 @@ import { Component } from "react";
 import { nanoid } from "nanoid";
 import ContactForm from "./components/ContactForm/ContactForm";
 import Filter from "./components/Filter/Filter";
+import ContactList from "./components/ContactList/ContactList"
 
 class App extends Component {
   state = {
@@ -32,7 +33,7 @@ class App extends Component {
       contacts: [...prevState.contacts, newContact],
     }));
   };
-
+  
   contactDelete = (index) => {
     this.setState((prevState) => {
       const newContacts = prevState.contacts.filter((_, idx) => idx !== index);
@@ -61,14 +62,6 @@ class App extends Component {
 
   render() {
     const filterredContacts = this.getFilteraddContacts();
-    const elements = filterredContacts.map((contact, index) => {
-      return (
-        <li key={contact.id} className="">
-          {contact.name}: {contact.number}
-          <button onClick={()=>this.contactDelete(index)}>Delete</button>
-        </li>
-      );
-    });
     return (
       <div className="">
         <div className="">
@@ -78,7 +71,7 @@ class App extends Component {
         <div>
           <h2>Contacts</h2>
           <Filter filterForm={this.filterForm} />
-          <ul className="">{elements}</ul>
+          <ContactList filterredContacts={filterredContacts} contactDelete={this.contactDelete}/>
         </div>
       </div>
     );
