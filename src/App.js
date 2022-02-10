@@ -3,28 +3,39 @@ import { nanoid } from "nanoid";
 
 class App extends Component {
   state = {
-    contacts: [],
+    contacts: [
+      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
+      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
+      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
+      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
+    ],
     name: "",
+    number: "",
+    filter: "",
   };
 
-  handleChange = (e) => {
-    this.setState({ name: e.target.value });
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    });
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
     const newContact = {
       name: this.state.name,
+      number: this.state.number,
       id: nanoid(),
     };
+    console.log(newContact);
     this.addToContacts(newContact);
-    // this.resetForm();
+    this.resetForm();
   };
 
-  // resetForm = () => {
-  //   this.setState({ ...this.state });
-  //   console.log({ ...this.state });
-  // }
+  resetForm = () => {
+    this.setState({ name: "", number: "" });
+  };
 
   addToContacts = (newContact) => {
     this.setState((prevState) => ({
@@ -32,12 +43,25 @@ class App extends Component {
     }));
   };
 
+  filterForm = (event) => {
+    const query = event.target.value;
+    this.setState({ filter: query });
+  };
 
   render() {
-    const { contacts, name } = this.state;
-    const infoItem = contacts.map((contact) => {
-      return <li key={contact.id} className="">{contact.name}</li>;
-    });
+    const { contacts, name, number } = this.state;
+    const infoItemList = contacts
+      .filter((c) => {
+        if (!this.state.filter) return true;
+        return !c.name.search(new RegExp(this.state.filter, "i"))
+      })
+      .map((contact) => {
+        return (
+          <li key={contact.id} className="">
+            {contact.name}: {contact.number}
+          </li>
+        );
+      });
     return (
       <div className="">
         <div className="">
@@ -55,14 +79,26 @@ class App extends Component {
                 required
               />
             </label>
+            <label className="">
+              Number
+              <input
+                type="tel"
+                name="number"
+                value={number}
+                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+                title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+                onChange={this.handleChange}
+                required
+              />
+            </label>
             <button type="submit">Add contact</button>
           </form>
         </div>
         <div>
-          <h1>Contacts</h1>
-          <ul className="">
-            {infoItem}
-          </ul>
+          <h2>Contacts</h2>
+          Find contacts by name
+          <input type="text" name="filter" onChange={this.filterForm} />
+          <ul className="">{infoItemList}</ul>
         </div>
       </div>
     );
