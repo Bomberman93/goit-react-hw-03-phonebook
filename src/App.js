@@ -2,7 +2,7 @@ import { Component } from "react";
 import { nanoid } from "nanoid";
 import ContactForm from "./components/ContactForm/ContactForm";
 import Filter from "./components/Filter/Filter";
-import ContactList from "./components/ContactList/ContactList"
+import ContactList from "./components/ContactList/ContactList";
 
 class App extends Component {
   state = {
@@ -33,10 +33,12 @@ class App extends Component {
       contacts: [...prevState.contacts, newContact],
     }));
   };
-  
+
   contactDelete = (contactId) => {
     this.setState((prevState) => {
-      const newContacts = prevState.contacts.filter((contact) => contact.id !== contactId);
+      const newContacts = prevState.contacts.filter(
+        (contact) => contact.id !== contactId
+      );
       return { contacts: newContacts };
     });
   };
@@ -60,6 +62,19 @@ class App extends Component {
     return filterredContacts;
   }
 
+  componentDidMount() {
+    const contact = localStorage.getItem("contacts");
+    const parsedTodos = JSON.parse(contact);
+      this.setState({ contacts: parsedTodos });
+  
+  }
+
+  componentDidUpdate(prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
+    }
+  }
+
   render() {
     const filterredContacts = this.getFilteraddContacts();
     return (
@@ -71,7 +86,10 @@ class App extends Component {
         <div>
           <h2>Contacts</h2>
           <Filter filterForm={this.filterForm} />
-          <ContactList filterredContacts={filterredContacts} contactDelete={this.contactDelete}/>
+          <ContactList
+            filterredContacts={filterredContacts}
+            contactDelete={this.contactDelete}
+          />
         </div>
       </div>
     );
