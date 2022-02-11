@@ -1,12 +1,12 @@
-import propTypes from "prop-types";
+import React from 'react';
 import PropTypes from "prop-types";
 
 const ContactLustItem = ({ filterredContacts, contactDelete }) => {
-  return filterredContacts.map((contact, index) => {
+  return filterredContacts.map((contact) => {
     return (
       <li key={contact.id} className="">
         {contact.name}: {contact.number}
-        <button onClick={() => contactDelete(index)}>Delete</button>
+        <button onClick={() => contactDelete(contact.id)}>Delete</button>
       </li>
     );
   });
@@ -16,10 +16,10 @@ export default ContactLustItem;
 
 ContactLustItem.propTypes = {
   contact: PropTypes.arrayOf(
-    propTypes.shape({
-      number: PropTypes.number,
-      id: PropTypes.string,
-      name: PropTypes.name,
+    PropTypes.shape({
+      number: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     })
   ),
 };

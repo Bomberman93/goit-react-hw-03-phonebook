@@ -34,9 +34,9 @@ class App extends Component {
     }));
   };
   
-  contactDelete = (index) => {
+  contactDelete = (contactId) => {
     this.setState((prevState) => {
-      const newContacts = prevState.contacts.filter((_, idx) => idx !== index);
+      const newContacts = prevState.contacts.filter((contact) => contact.id !== contactId);
       return { contacts: newContacts };
     });
   };

@@ -1,7 +1,6 @@
 import styles from './filter.module.css';
 
 const Filter = ({filterForm}) => {
-  console.log({filterForm})
   return (
     <div className={styles.container}>
       Find contacts by name
